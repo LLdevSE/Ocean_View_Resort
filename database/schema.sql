@@ -2,12 +2,9 @@
 --  Ocean View Resort — MySQL Database Setup Script
 --  Run this script ONCE to create the schema, tables,
 --  stored procedures, triggers, and seed data.
+--  NOTE: No CREATE DATABASE / USE here — works on any database
+--        (Railway's default db is named 'railway').
 -- ============================================================
-
--- Create & select database
-CREATE DATABASE IF NOT EXISTS Ocean_View_Resort_Database CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE Ocean_View_Resort_Database;
 
 -- ============================================================
 --  1. TABLES
@@ -60,7 +57,7 @@ CREATE TABLE reservations (
     check_out DATE NOT NULL,
     total_days INT DEFAULT NULL, -- Calculated by trigger
     total_price DECIMAL(10, 2) DEFAULT NULL, -- Calculated by trigger
-    reservation_by VARCHAR(20) NOT NULL, -- FK → users.staff_id
+    reservation_by VARCHAR(20) NOT NULL, -- FK -> users.staff_id
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (res_no),
     CONSTRAINT fk_res_staff FOREIGN KEY (reservation_by) REFERENCES users (staff_id),
@@ -77,7 +74,7 @@ DROP PROCEDURE IF EXISTS sp_create_staff$$
 
 CREATE PROCEDURE sp_create_staff (
     IN  p_username   VARCHAR(80),
-    IN  p_password   VARCHAR(255),   -- Already BCrypt-hashed by Java
+    IN  p_password   VARCHAR(255),
     IN  p_mobile_num VARCHAR(20),
     IN  p_address    VARCHAR(255)
 )
@@ -85,21 +82,19 @@ BEGIN
     DECLARE v_next_num   INT;
     DECLARE v_staff_id   VARCHAR(20);
 
-    -- Determine next sequential number
     SELECT COALESCE(MAX(CAST(SUBSTRING(staff_id, 5) AS UNSIGNED)), 0) + 1
     INTO   v_next_num
     FROM   users
     WHERE  role = 'STAFF'
       AND  staff_id IS NOT NULL;
 
-    -- Format: STF-001, STF-002, ...
     SET v_staff_id = CONCAT('STF-', LPAD(v_next_num, 3, '0'));
 
     INSERT INTO users (staff_id, role, username, password, mobile_num, address)
     VALUES (v_staff_id, 'STAFF', p_username, p_password, p_mobile_num, p_address);
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 -- ============================================================
 --  3. TRIGGER — Calculate total_days & total_price on INSERT
@@ -115,15 +110,12 @@ FOR EACH ROW
 BEGIN
     DECLARE v_price DECIMAL(10,2);
 
-    -- Calculate total days (minimum 1)
     SET NEW.total_days = GREATEST(DATEDIFF(NEW.check_out, NEW.check_in), 1);
 
-    -- Look up the price_per_night for the requested room type (uses cheapest available)
     SELECT MIN(price_per_night) INTO v_price
     FROM   rooms
     WHERE  room_type = NEW.room_type;
 
-    -- Calculate total price
     IF v_price IS NOT NULL THEN
         SET NEW.total_price = NEW.total_days * v_price;
     ELSE
@@ -131,7 +123,7 @@ BEGIN
     END IF;
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 -- ============================================================
 --  4. TRIGGER — Auto-generate res_no on INSERT
@@ -154,14 +146,13 @@ BEGIN
     SET NEW.res_no = CONCAT('RES-', LPAD(v_next, 4, '0'));
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 -- ============================================================
 --  5. SEED DATA
 -- ============================================================
 
 -- Default Admin user (Username: admin, Password: admin678)
--- BCrypt hash for "admin678" with cost factor 12:
 INSERT INTO
     users (
         staff_id,
@@ -204,7 +195,7 @@ VALUES (
         '103',
         'STANDARD',
         5500.00,
-        'BOOKED'
+        'AVAILABLE'
     ),
     (
         '201',
@@ -222,7 +213,7 @@ VALUES (
         '203',
         'DELUXE',
         9500.00,
-        'BOOKED'
+        'AVAILABLE'
     ),
     (
         '301',
