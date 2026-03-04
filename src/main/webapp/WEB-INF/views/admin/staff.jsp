@@ -243,46 +243,11 @@
 <div class="app-wrapper">
 
     <!-- ===========================
-         SIDEBAR
+         SIDEBAR (SHARED)
     =========================== -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <div class="logo-icon"><i class="bi bi-building" style="color:#fff;"></i></div>
-            <div class="resort-name">Ocean View<br><span>Resort</span></div>
-            <div class="resort-tagline">Management Portal</div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section-title">Main Menu</div>
-
-            <a href="${pageContext.request.contextPath}/admin/reservations" class="nav-item">
-                <i class="bi bi-calendar2-check"></i> Reservations
-            </a>
-
-            <a href="${pageContext.request.contextPath}/admin/staff" class="nav-item active">
-                <i class="bi bi-people"></i> Staff Management
-            </a>
-
-            <div class="nav-section-title">Billing</div>
-
-            <a href="${pageContext.request.contextPath}/admin/billing" class="nav-item">
-                <i class="bi bi-receipt"></i> Billing &amp; Invoices
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-info-sidebar">
-                <div class="user-avatar"><%= initial %></div>
-                <div class="user-info-text">
-                    <div class="user-name"><%= username %></div>
-                    <div class="user-role">Administrator</div>
-                </div>
-            </div>
-            <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
-                <i class="bi bi-box-arrow-left"></i> Sign Out
-            </a>
-        </div>
-    </aside>
+    <jsp:include page="/WEB-INF/views/components/sidebar.jsp">
+        <jsp:param name="activePage" value="admin-staff"/>
+    </jsp:include>
 
     <!-- ===========================
          MAIN CONTENT
@@ -403,7 +368,7 @@
                                                     '${staff.username}',
                                                     '${staff.staffId}',
                                                     '${staff.mobileNum}',
-                                                    `${staff.address}`
+                                                    '${staff.address}'
                                                 )">
                                             <i class="bi bi-pencil-square me-1"></i>Edit
                                         </button>
@@ -482,7 +447,7 @@
                                                                     '${staff.username}',
                                                                     '${staff.staffId}',
                                                                     '${staff.mobileNum}',
-                                                                    `${staff.address}`
+                                                                    '${staff.address}'
                                                                 )">
                                                             <i class="bi bi-pencil-square"></i>
                                                         </button>

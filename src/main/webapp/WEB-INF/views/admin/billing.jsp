@@ -337,41 +337,9 @@
     <!-- ===========================
          SIDEBAR (Hidden on print)
     =========================== -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <div class="logo-icon"><i class="bi bi-building" style="color:#fff;"></i></div>
-            <div class="resort-name">Ocean View<br><span>Resort</span></div>
-            <div class="resort-tagline">Management Portal</div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section-title">Main Menu</div>
-            <a href="${pageContext.request.contextPath}/admin/reservations" class="nav-item">
-                <i class="bi bi-calendar2-check"></i> Reservations
-            </a>
-            <a href="${pageContext.request.contextPath}/admin/staff" class="nav-item">
-                <i class="bi bi-people"></i> Staff Management
-            </a>
-
-            <div class="nav-section-title">Billing</div>
-            <a href="${pageContext.request.contextPath}/admin/billing" class="nav-item active">
-                <i class="bi bi-receipt"></i> Billing &amp; Invoices
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-info-sidebar">
-                <div class="user-avatar"><%= initial %></div>
-                <div class="user-info-text">
-                    <div class="user-name"><%= username %></div>
-                    <div class="user-role">Administrator</div>
-                </div>
-            </div>
-            <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
-                <i class="bi bi-box-arrow-left"></i> Sign Out
-            </a>
-        </div>
-    </aside>
+    <jsp:include page="/WEB-INF/views/components/sidebar.jsp">
+        <jsp:param name="activePage" value="admin-billing"/>
+    </jsp:include>
 
     <!-- ===========================
          MAIN CONTENT
@@ -547,23 +515,6 @@
     </main>
 </div>
 
-<!-- Sidebar Overlay (mobile) -->
-<div id="sidebarOverlay"
-     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6);
-            z-index:999; backdrop-filter:blur(3px);"
-     onclick="closeSidebar()"></div>
 
-<script>
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').style.display = 'none';
-}
-
-document.getElementById('hamburgerBtn')?.addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('open');
-    const isOpen = document.getElementById('sidebar').classList.contains('open');
-    document.getElementById('sidebarOverlay').style.display = isOpen ? 'block' : 'none';
-});
-</script>
 </body>
 </html>

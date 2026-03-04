@@ -95,40 +95,11 @@
 <div class="app-wrapper">
 
     <!-- ===========================
-         SIDEBAR 
+         SIDEBAR (SHARED)
     =========================== -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <div class="logo-icon"><i class="bi bi-building" style="color:#fff;"></i></div>
-            <div class="resort-name">Ocean View<br><span>Resort</span></div>
-            <div class="resort-tagline">Staff Portal</div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section-title">Main Menu</div>
-            <a href="${pageContext.request.contextPath}/staff/reservations" class="nav-item active">
-                <i class="bi bi-calendar2-check"></i> My Reservations
-            </a>
-            
-            <div class="nav-section-title">Personal</div>
-            <a href="${pageContext.request.contextPath}/staff/profile" class="nav-item">
-                <i class="bi bi-person-circle"></i> My Profile
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-info-sidebar">
-                <div class="user-avatar"><%= initial %></div>
-                <div class="user-info-text">
-                    <div class="user-name"><%= username %></div>
-                    <div class="user-role">Staff Member</div>
-                </div>
-            </div>
-            <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
-                <i class="bi bi-box-arrow-left"></i> Sign Out
-            </a>
-        </div>
-    </aside>
+    <jsp:include page="/WEB-INF/views/components/sidebar.jsp">
+        <jsp:param name="activePage" value="staff-reservations"/>
+    </jsp:include>
 
     <!-- ===========================
          MAIN CONTENT
@@ -438,13 +409,7 @@
     </div>
 </div>
 
-<!-- Sidebar Overlay (mobile) -->
-<div id="sidebarOverlay" 
-     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); 
-            z-index:999; backdrop-filter:blur(3px);"
-     onclick="closeSidebar()"></div>
 
-<script>
 // Format dates for min attributes
 const today = new Date().toISOString().split('T')[0];
 document.getElementById('c_checkIn').min = today;
@@ -560,16 +525,6 @@ if (flashMsg) {
     }, 4000);
 }
 
-// Mobile Sidebar
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').style.display = 'none';
-}
-document.getElementById('hamburgerBtn')?.addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('open');
-    const isOpen = document.getElementById('sidebar').classList.contains('open');
-    document.getElementById('sidebarOverlay').style.display = isOpen ? 'block' : 'none';
-});
-</script>
+
 </body>
 </html>
