@@ -4,7 +4,7 @@ import com.oceanview.dao.UserDAO;
 import com.oceanview.model.User;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.*;
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
  * Handles GET → display login page (login.jsp)
  * Handles POST → validate credentials, create session, redirect by role
  */
-@WebServlet("/login")
+
 public class LoginServlet extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();

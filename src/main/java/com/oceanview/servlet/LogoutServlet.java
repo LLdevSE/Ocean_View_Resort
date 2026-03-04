@@ -1,14 +1,14 @@
 package com.oceanview.servlet;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.*;
 import java.io.IOException;
 
 /**
  * LogoutServlet — invalidates the user's session and redirects to login page.
  */
-@WebServlet("/logout")
+
 public class LogoutServlet extends HttpServlet {
 
     @Override

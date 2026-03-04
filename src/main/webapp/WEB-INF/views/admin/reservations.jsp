@@ -692,6 +692,7 @@ if (flashMsg) {
 }
 
 
+</script>
 
 </body>
 </html>

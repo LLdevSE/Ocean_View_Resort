@@ -21,7 +21,7 @@ public class DatabaseConnectionManager {
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/Ocean_View_Resort_Database?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "your_mysql_password"; // ← Change this
+    private static final String DB_PASSWORD = "admin123"; // ← Change this
 
     // ---- Singleton instance (volatile for thread-safety) ----
     private static volatile DatabaseConnectionManager instance;

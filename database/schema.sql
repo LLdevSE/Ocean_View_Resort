@@ -175,9 +175,9 @@ VALUES (
         NULL,
         'ADMIN',
         'admin',
-        '$2a$12$lZkGqZ3yqFSLO1fHTZm8z.ebN3PEJDVwnRuOFYSX0wnq3p5wW7.i6',
-        '0771234567',
-        'Ocean View Resort HQ, Colombo'
+        '$2a$12$ZrxVO5BKmOYuVfUFFbAGqOyo2wqpVWbRolRtZutt5.wyZCpImx2a.',
+        '123-456-7890',
+        'Ocean View Resort Admin Office'
     );
 
 -- Sample Rooms
