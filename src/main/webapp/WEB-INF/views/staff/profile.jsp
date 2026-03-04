@@ -301,7 +301,7 @@
     </main>
 </div>
 
-
+<script>
 // Password toggle
 document.getElementById('togglePwd').addEventListener('click', () => {
     const pwd = document.getElementById('password');
@@ -352,6 +352,7 @@ if (flashMsg) {
     }, 4000);
 }
 
+</script>
 
 </body>
 </html>

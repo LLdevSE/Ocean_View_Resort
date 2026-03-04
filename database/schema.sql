@@ -172,7 +172,7 @@ INSERT INTO
         address
     )
 VALUES (
-        NULL,
+        'ADMIN',
         'ADMIN',
         'admin',
         '$2a$12$ZrxVO5BKmOYuVfUFFbAGqOyo2wqpVWbRolRtZutt5.wyZCpImx2a.',

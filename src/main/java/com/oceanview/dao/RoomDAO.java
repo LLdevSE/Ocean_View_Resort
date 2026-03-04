@@ -32,33 +32,33 @@ public class RoomDAO {
         return list;
     }
 
-    public List<Room> getAvailableRoomsByType(String roomType) {
-        List<Room> list = new ArrayList<>();
-        String sql = "SELECT * FROM rooms WHERE room_type = ? AND status = 'AVAILABLE' ORDER BY room_number";
+    public int getAvailableRoomCountByType(String roomType) {
+        String sql = "SELECT (SELECT COUNT(*) FROM rooms WHERE room_type = ?) - " +
+                "(SELECT COUNT(*) FROM reservations WHERE room_type = ? AND check_in <= CURDATE() AND check_out > CURDATE())";
         try (Connection conn = dbManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomType);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next())
-                    list.add(mapRow(rs));
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error fetching available rooms by type: " + roomType, e);
-        }
-        return list;
-    }
-
-    public int countByStatus(String status) {
-        String sql = "SELECT COUNT(*) FROM rooms WHERE status = ?";
-        try (Connection conn = dbManager.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, status);
+            ps.setString(2, roomType);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next())
-                    return rs.getInt(1);
+                    return Math.max(0, rs.getInt(1));
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error counting rooms by status: " + status, e);
+            LOGGER.log(Level.SEVERE, "Error fetching available room count by type: " + roomType, e);
+        }
+        return 0;
+    }
+
+    public int countAvailableRoomsToday() {
+        String sql = "SELECT (SELECT COUNT(*) FROM rooms) - " +
+                "(SELECT COUNT(*) FROM reservations WHERE check_in <= CURDATE() AND check_out > CURDATE())";
+        try (Connection conn = dbManager.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            if (rs.next())
+                return Math.max(0, rs.getInt(1));
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error counting available rooms today", e);
         }
         return 0;
     }

@@ -130,7 +130,10 @@ public class ReservationServlet extends HttpServlet {
         req.setAttribute("reservations", reservations);
         req.setAttribute("totalReservations", reservations.size());
         req.setAttribute("totalRooms", roomDAO.countAll());
-        req.setAttribute("availableRooms", roomDAO.countByStatus("AVAILABLE"));
+        req.setAttribute("availableRooms", roomDAO.countAvailableRoomsToday());
+        req.setAttribute("availableStandard", roomDAO.getAvailableRoomCountByType("STANDARD"));
+        req.setAttribute("availableDeluxe", roomDAO.getAvailableRoomCountByType("DELUXE"));
+        req.setAttribute("availableSuite", roomDAO.getAvailableRoomCountByType("SUITE"));
         req.setAttribute("totalStaff", userDAO.getAllStaff().size());
 
         // Flash messages from session

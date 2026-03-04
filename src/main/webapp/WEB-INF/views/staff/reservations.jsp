@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Reservations &mdash; Staff Portal</title>
+    <title>All Reservations &mdash; Staff Portal</title>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
@@ -114,8 +114,8 @@
                 </button>
             </div>
             <div>
-                <div class="page-title">My Reservations</div>
-                <div class="page-subtitle">Manage reservations you have created</div>
+                <div class="page-title">All Reservations</div>
+                <div class="page-subtitle">Manage all hotel reservations</div>
             </div>
             <div>
                 <button class="btn-accent" onclick="openCreateModal()">
@@ -143,7 +143,7 @@
                 <div class="stat-card glass-card purple">
                     <div class="stat-icon"><i class="bi bi-bookmark-star-fill"></i></div>
                     <div class="stat-value">${totalStaffReservations}</div>
-                    <div class="stat-label">My Reservations</div>
+                    <div class="stat-label">Total Reservations</div>
                 </div>
                 <!-- Room Availability Indicators -->
                 <div class="stat-card glass-card blue">
@@ -184,7 +184,7 @@
             <!-- Table Section -->
             <div class="glass-card table-section">
                 <div class="table-header">
-                    <span class="table-title">Reservations Handled By Me</span>
+                    <span class="table-title">All Reservations</span>
                     <span class="table-count" id="tableRowCount">(${totalStaffReservations} records)</span>
                 </div>
                 
@@ -198,6 +198,7 @@
                                 <th>Check In</th>
                                 <th>Check Out</th>
                                 <th style="text-align:right;">Amount (Rs.)</th>
+                                <th>Reserved By</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -205,8 +206,8 @@
                             <c:choose>
                                 <c:when test="${empty reservationList}">
                                     <tr>
-                                        <td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">
-                                            You haven't created any reservations yet. Click "New Reservation" to start.
+                                        <td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">
+                                            No reservations found. Click "New Reservation" to create one.
                                         </td>
                                     </tr>
                                 </c:when>
@@ -237,21 +238,38 @@
                                                 <fmt:formatNumber value="${res.totalPrice}" pattern="#,##0.00" />
                                             </td>
                                             <td>
-                                                <!-- Staff can only Edit (no Delete) -->
+                                                <div style="font-size:0.85rem; color:var(--text-white);">
+                                                    ${empty res.reservedByUsername ? (res.reservationBy eq 'ADMIN' ? 'admin' : res.reservationBy) : res.reservedByUsername}
+                                                </div>
+                                                <div style="font-size:0.75rem; color:var(--text-muted);">
+                                                    ${res.reservationBy eq 'ADMIN' ? 'ADMIN' : res.reservationBy}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- Staff can only Edit their OWN reservations -->
                                                 <div class="action-btns">
-                                                    <button class="btn-success-custom" 
-                                                            title="Edit Reservation"
-                                                            onclick="openEditModal(
-                                                                '${res.resNo}',
-                                                                '${res.customerName}',
-                                                                '${res.customerMobileNum}',
-                                                                `${res.customerAddress}`,
-                                                                '${res.roomType}',
-                                                                '${res.checkIn}',
-                                                                '${res.checkOut}'
-                                                            )">
-                                                        <i class="bi bi-pencil-square"></i> Edit
-                                                    </button>
+                                                    <c:choose>
+                                                        <c:when test="${res.reservationBy == sessionScope.user.staffId}">
+                                                            <button class="btn-success-custom" 
+                                                                    title="Edit Reservation"
+                                                                    onclick="openEditModal(
+                                                                        '${res.resNo}',
+                                                                        '${res.customerName}',
+                                                                        '${res.customerMobileNum}',
+                                                                        `${res.customerAddress}`,
+                                                                        '${res.roomType}',
+                                                                        '${res.checkIn}',
+                                                                        '${res.checkOut}'
+                                                                    )">
+                                                                <i class="bi bi-pencil-square"></i> Edit
+                                                            </button>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <button class="btn-success-custom" style="opacity:0.4; cursor:not-allowed;" title="You can only edit your own reservations" disabled>
+                                                                <i class="bi bi-pencil-square"></i> Edit
+                                                            </button>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                             </td>
                                         </tr>
@@ -410,6 +428,7 @@
 </div>
 
 
+<script>
 // Format dates for min attributes
 const today = new Date().toISOString().split('T')[0];
 document.getElementById('c_checkIn').min = today;
@@ -525,6 +544,7 @@ if (flashMsg) {
     }, 4000);
 }
 
+</script>
 
 </body>
 </html>

@@ -132,16 +132,16 @@ public class StaffReservationServlet extends HttpServlet {
         }
 
         if (currentUser != null) {
-            // Load ONLY reservations for this staff member
-            List<Reservation> staffReservations = reservationDAO.getReservationsByStaff(currentUser.getStaffId());
-            req.setAttribute("reservationList", staffReservations);
-            req.setAttribute("totalStaffReservations", staffReservations.size());
+            // Load ALL reservations for staff members (same as admin)
+            List<Reservation> allReservations = reservationDAO.getAllReservations();
+            req.setAttribute("reservationList", allReservations);
+            req.setAttribute("totalStaffReservations", allReservations.size());
         }
 
         // Available room counts for the UI (dashboard stats)
-        req.setAttribute("availableStandard", roomDAO.getAvailableRoomsByType(Room.RoomType.STANDARD.name()).size());
-        req.setAttribute("availableDeluxe", roomDAO.getAvailableRoomsByType(Room.RoomType.DELUXE.name()).size());
-        req.setAttribute("availableSuite", roomDAO.getAvailableRoomsByType(Room.RoomType.SUITE.name()).size());
+        req.setAttribute("availableStandard", roomDAO.getAvailableRoomCountByType(Room.RoomType.STANDARD.name()));
+        req.setAttribute("availableDeluxe", roomDAO.getAvailableRoomCountByType(Room.RoomType.DELUXE.name()));
+        req.setAttribute("availableSuite", roomDAO.getAvailableRoomCountByType(Room.RoomType.SUITE.name()));
 
         if (session != null) {
             req.setAttribute("flashSuccess", session.getAttribute("flashSuccess"));

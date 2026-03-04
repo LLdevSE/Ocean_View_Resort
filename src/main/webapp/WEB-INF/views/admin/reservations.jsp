@@ -222,6 +222,21 @@
                     <div class="stat-value">${totalStaff}</div>
                     <div class="stat-label">Staff Members</div>
                 </div>
+                <div class="stat-card glass-card teal" style="background:linear-gradient(135deg,rgba(0,150,136,0.25),rgba(0,150,136,0.08));">
+                    <div class="stat-icon"><i class="bi bi-door-closed-fill"></i></div>
+                    <div class="stat-value">${availableStandard}</div>
+                    <div class="stat-label">Standard Avail.</div>
+                </div>
+                <div class="stat-card glass-card orange" style="background:linear-gradient(135deg,rgba(255,152,0,0.25),rgba(255,152,0,0.08));">
+                    <div class="stat-icon"><i class="bi bi-door-open-fill"></i></div>
+                    <div class="stat-value">${availableDeluxe}</div>
+                    <div class="stat-label">Deluxe Avail.</div>
+                </div>
+                <div class="stat-card glass-card pink" style="background:linear-gradient(135deg,rgba(233,30,99,0.25),rgba(233,30,99,0.08));">
+                    <div class="stat-icon"><i class="bi bi-star-fill"></i></div>
+                    <div class="stat-value">${availableSuite}</div>
+                    <div class="stat-label">Suite Avail.</div>
+                </div>
             </div>
 
             <!-- ---- Filter / Search ---- -->
