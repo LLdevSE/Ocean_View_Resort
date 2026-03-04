@@ -18,9 +18,9 @@ public class DatabaseConnectionManager {
     private static final Logger LOGGER = Logger.getLogger(DatabaseConnectionManager.class.getName());
 
     // ---- Database Configuration ----
-    private static final String DB_DRIVER   = "com.mysql.cj.jdbc.Driver";
-    private static final String DB_URL      = "jdbc:mysql://localhost:3306/ocean_view_resort?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER     = "root";
+    private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/Ocean_View_Resort_Database?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "your_mysql_password"; // ← Change this
 
     // ---- Singleton instance (volatile for thread-safety) ----
