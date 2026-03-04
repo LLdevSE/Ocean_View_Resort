@@ -4,12 +4,8 @@
 FROM maven:3.9-eclipse-temurin-11 AS build
 WORKDIR /app
 
-# Copy POM first so dependency downloads are cached in a separate layer
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
-# Copy source and build
-COPY src ./src
+# Copy everything and build (target/ is gitignored so it won't be in context)
+COPY . .
 RUN mvn clean package -DskipTests -B
 
 # =====================================================================
@@ -20,12 +16,12 @@ FROM tomcat:9.0-jdk11-temurin
 # Remove the default ROOT webapp
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
-# Deploy our WAR as ROOT so the app is served at /
-COPY --from=build /app/target/ocean-view-resort-1.0-SNAPSHOT.war \
+# pom.xml sets <finalName>ocean-view-resort</finalName>
+# so Maven produces ocean-view-resort.war (no version suffix)
+COPY --from=build /app/target/ocean-view-resort.war \
      /usr/local/tomcat/webapps/ROOT.war
 
-# Railway sets PORT at runtime; Tomcat listens on 8080 by default.
-# We update server.xml to honour the PORT env variable if set.
+# Railway sets PORT at runtime; update server.xml to honour it
 RUN sed -i 's/port="8080"/port="${PORT:-8080}"/' /usr/local/tomcat/conf/server.xml
 
 EXPOSE 8080
