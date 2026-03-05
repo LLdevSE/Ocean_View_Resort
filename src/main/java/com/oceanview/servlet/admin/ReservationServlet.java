@@ -154,8 +154,16 @@ public class ReservationServlet extends HttpServlet {
         r.setCustomerMobileNum(req.getParameter("customerMobile"));
         r.setCustomerAddress(req.getParameter("customerAddress"));
         r.setRoomType(req.getParameter("roomType"));
-        r.setCheckIn(Date.valueOf(req.getParameter("checkIn")));
-        r.setCheckOut(Date.valueOf(req.getParameter("checkOut")));
+
+        Date checkIn = Date.valueOf(req.getParameter("checkIn"));
+        Date checkOut = Date.valueOf(req.getParameter("checkOut"));
+
+        if (!checkOut.after(checkIn)) {
+            throw new IllegalArgumentException("Check-out date must be after check-in date.");
+        }
+
+        r.setCheckIn(checkIn);
+        r.setCheckOut(checkOut);
 
         String roomIdStr = req.getParameter("roomId");
         if (roomIdStr != null && !roomIdStr.isEmpty()) {

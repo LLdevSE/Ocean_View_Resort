@@ -57,21 +57,33 @@ public class StaffReservationServlet extends HttpServlet {
 
         User currentUser = (User) session.getAttribute("user");
 
-        Reservation res = new Reservation();
-        res.setCustomerName(sanitize(req.getParameter("customerName")));
-        res.setCustomerMobileNum(sanitize(req.getParameter("customerMobileNum")));
-        res.setCustomerAddress(sanitize(req.getParameter("customerAddress")));
-        res.setRoomType(req.getParameter("roomType"));
-        res.setCheckIn(Date.valueOf(req.getParameter("checkIn")));
-        res.setCheckOut(Date.valueOf(req.getParameter("checkOut")));
-        res.setReservationBy(currentUser.getStaffId()); // Force bind to current staff member
+        try {
+            Reservation res = new Reservation();
+            res.setCustomerName(sanitize(req.getParameter("customerName")));
+            res.setCustomerMobileNum(sanitize(req.getParameter("customerMobileNum")));
+            res.setCustomerAddress(sanitize(req.getParameter("customerAddress")));
+            res.setRoomType(req.getParameter("roomType"));
 
-        boolean success = reservationDAO.createReservation(res);
+            Date checkIn = Date.valueOf(req.getParameter("checkIn"));
+            Date checkOut = Date.valueOf(req.getParameter("checkOut"));
+            if (!checkOut.after(checkIn)) {
+                throw new IllegalArgumentException("Check-out date must be after check-in date.");
+            }
+            res.setCheckIn(checkIn);
+            res.setCheckOut(checkOut);
 
-        if (success) {
-            session.setAttribute("flashSuccess", "Reservation created successfully!");
-        } else {
-            session.setAttribute("flashError", "Failed to create reservation. Date conflict or no rooms available.");
+            res.setReservationBy(currentUser.getStaffId()); // Force bind to current staff member
+
+            boolean success = reservationDAO.createReservation(res);
+
+            if (success) {
+                session.setAttribute("flashSuccess", "Reservation created successfully!");
+            } else {
+                session.setAttribute("flashError",
+                        "Failed to create reservation. Date conflict or no rooms available.");
+            }
+        } catch (Exception e) {
+            session.setAttribute("flashError", "Error: " + e.getMessage());
         }
 
         resp.sendRedirect(req.getContextPath() + "/staff/reservations");
@@ -103,22 +115,33 @@ public class StaffReservationServlet extends HttpServlet {
             return;
         }
 
-        Reservation res = new Reservation();
-        res.setResNo(resNo.trim());
-        res.setCustomerName(sanitize(req.getParameter("customerName")));
-        res.setCustomerMobileNum(sanitize(req.getParameter("customerMobileNum")));
-        res.setCustomerAddress(sanitize(req.getParameter("customerAddress")));
-        res.setRoomType(req.getParameter("roomType"));
-        res.setCheckIn(Date.valueOf(req.getParameter("checkIn")));
-        res.setCheckOut(Date.valueOf(req.getParameter("checkOut")));
-        res.setReservationBy(currentUser.getStaffId());
+        try {
+            Reservation res = new Reservation();
+            res.setResNo(resNo.trim());
+            res.setCustomerName(sanitize(req.getParameter("customerName")));
+            res.setCustomerMobileNum(sanitize(req.getParameter("customerMobileNum")));
+            res.setCustomerAddress(sanitize(req.getParameter("customerAddress")));
+            res.setRoomType(req.getParameter("roomType"));
 
-        boolean success = reservationDAO.updateReservation(res);
+            Date checkIn = Date.valueOf(req.getParameter("checkIn"));
+            Date checkOut = Date.valueOf(req.getParameter("checkOut"));
+            if (!checkOut.after(checkIn)) {
+                throw new IllegalArgumentException("Check-out date must be after check-in date.");
+            }
+            res.setCheckIn(checkIn);
+            res.setCheckOut(checkOut);
 
-        if (success) {
-            session.setAttribute("flashSuccess", "Reservation updated successfully!");
-        } else {
-            session.setAttribute("flashError", "Failed to update reservation. Date conflict or invalid data.");
+            res.setReservationBy(currentUser.getStaffId());
+
+            boolean success = reservationDAO.updateReservation(res);
+
+            if (success) {
+                session.setAttribute("flashSuccess", "Reservation updated successfully!");
+            } else {
+                session.setAttribute("flashError", "Failed to update reservation. Date conflict or invalid data.");
+            }
+        } catch (Exception e) {
+            session.setAttribute("flashError", "Error: " + e.getMessage());
         }
 
         resp.sendRedirect(req.getContextPath() + "/staff/reservations");

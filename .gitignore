@@ -22,3 +22,8 @@ Thumbs.db
 
 # Tomcat
 work/
+
+# Custom Documentation
+ABOUTWEB.md
+README.md
+
