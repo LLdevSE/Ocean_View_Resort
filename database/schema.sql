@@ -94,7 +94,7 @@ BEGIN
     VALUES (v_staff_id, 'STAFF', p_username, p_password, p_mobile_num, p_address);
 END$$
 
-DELIMITER ;
+DELIMITER;
 
 -- ============================================================
 --  3. TRIGGER — Calculate total_days & total_price on INSERT
@@ -123,7 +123,7 @@ BEGIN
     END IF;
 END$$
 
-DELIMITER ;
+DELIMITER;
 
 -- ============================================================
 --  4. TRIGGER — Auto-generate res_no on INSERT
@@ -146,7 +146,7 @@ BEGIN
     SET NEW.res_no = CONCAT('RES-', LPAD(v_next, 4, '0'));
 END$$
 
-DELIMITER ;
+DELIMITER;
 
 -- ============================================================
 --  5. SEED DATA
